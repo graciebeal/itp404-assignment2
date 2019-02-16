@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Subreddit Search</title>
+
+	<style>
+		@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:300');
+
+    .error {
+      text-align: center;
+      font-size: 26px;
+      margin-top: 40px;
+      color: #ff4301;
+      font-weight: bold;
+    }
+
+    .orangelink {
+      color: #ff4301;
+    }
+
+		.loader {
+  margin: 100px auto;
+  font-size: 25px;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  position: relative;
+  text-indent: -9999em;
+  -webkit-animation: load5 1.1s infinite ease;
+  animation: load5 1.1s infinite ease;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+@-webkit-keyframes load5 {
+  0%,
+  100% {
+    box-shadow: 0em -2.6em 0em 0em #ff8000, 1.8em -1.8em 0 0em rgba(255,128,0, 0.2), 2.5em 0em 0 0em rgba(255,128,0, 0.2), 1.75em 1.75em 0 0em rgba(255,128,0, 0.2), 0em 2.5em 0 0em rgba(255,128,0, 0.2), -1.8em 1.8em 0 0em rgba(255,128,0, 0.2), -2.6em 0em 0 0em rgba(255,128,0, 0.5), -1.8em -1.8em 0 0em rgba(255,128,0, 0.7);
+  }
+  12.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.7), 1.8em -1.8em 0 0em #ff8000, 2.5em 0em 0 0em rgba(255,128,0, 0.2), 1.75em 1.75em 0 0em rgba(255,128,0, 0.2), 0em 2.5em 0 0em rgba(255,128,0, 0.2), -1.8em 1.8em 0 0em rgba(255,128,0, 0.2), -2.6em 0em 0 0em rgba(255,128,0, 0.2), -1.8em -1.8em 0 0em rgba(255,128,0, 0.5);
+  }
+  25% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.5), 1.8em -1.8em 0 0em rgba(255,128,0, 0.7), 2.5em 0em 0 0em #ff8000, 1.75em 1.75em 0 0em rgba(255,128,0, 0.2), 0em 2.5em 0 0em rgba(255,128,0, 0.2), -1.8em 1.8em 0 0em rgba(255,128,0, 0.2), -2.6em 0em 0 0em rgba(255,128,0, 0.2), -1.8em -1.8em 0 0em rgba(255,128,0, 0.2);
+  }
+  37.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.2), 1.8em -1.8em 0 0em rgba(255,128,0, 0.5), 2.5em 0em 0 0em rgba(255,128,0, 0.7), 1.75em 1.75em 0 0em #ff8000, 0em 2.5em 0 0em rgba(255,128,0, 0.2), -1.8em 1.8em 0 0em rgba(255,128,0, 0.2), -2.6em 0em 0 0em rgba(255,128,0, 0.2), -1.8em -1.8em 0 0em rgba(255,128,0, 0.2);
+  }
+  50% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.2), 1.8em -1.8em 0 0em rgba(255,128,0, 0.2), 2.5em 0em 0 0em rgba(255,128,0, 0.5), 1.75em 1.75em 0 0em rgba(255,128,0, 0.7), 0em 2.5em 0 0em #ff8000, -1.8em 1.8em 0 0em rgba(255,128,0, 0.2), -2.6em 0em 0 0em rgba(255,128,0, 0.2), -1.8em -1.8em 0 0em rgba(255,128,0, 0.2);
+  }
+  62.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.2), 1.8em -1.8em 0 0em rgba(255,128,0, 0.2), 2.5em 0em 0 0em rgba(255,128,0, 0.2), 1.75em 1.75em 0 0em rgba(255,128,0, 0.5), 0em 2.5em 0 0em rgba(255,128,0, 0.7), -1.8em 1.8em 0 0em #ff8000, -2.6em 0em 0 0em rgba(255,128,0, 0.2), -1.8em -1.8em 0 0em rgba(255,128,0, 0.2);
+  }
+  75% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.2), 1.8em -1.8em 0 0em rgba(255,128,0, 0.2), 2.5em 0em 0 0em rgba(255,128,0, 0.2), 1.75em 1.75em 0 0em rgba(255,128,0, 0.2), 0em 2.5em 0 0em rgba(255,128,0, 0.5), -1.8em 1.8em 0 0em rgba(255,128,0, 0.7), -2.6em 0em 0 0em #ff8000, -1.8em -1.8em 0 0em rgba(255,128,0, 0.2);
+  }
+  87.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.2), 1.8em -1.8em 0 0em rgba(255,128,0, 0.2), 2.5em 0em 0 0em rgba(255,128,0, 0.2), 1.75em 1.75em 0 0em rgba(255,128,0, 0.2), 0em 2.5em 0 0em rgba(255,128,0, 0.2), -1.8em 1.8em 0 0em rgba(255,128,0, 0.5), -2.6em 0em 0 0em rgba(255,128,0, 0.7), -1.8em -1.8em 0 0em #ff8000;
+  }
+}
+@keyframes load5 {
+  0%,
+  100% {
+    box-shadow: 0em -2.6em 0em 0em #ff8000, 1.8em -1.8em 0 0em rgba(255,128,0, 0.2), 2.5em 0em 0 0em rgba(255,128,0, 0.2), 1.75em 1.75em 0 0em rgba(255,128,0, 0.2), 0em 2.5em 0 0em rgba(255,128,0, 0.2), -1.8em 1.8em 0 0em rgba(255,128,0, 0.2), -2.6em 0em 0 0em rgba(255,128,0, 0.5), -1.8em -1.8em 0 0em rgba(255,128,0, 0.7);
+  }
+  12.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.7), 1.8em -1.8em 0 0em #ff8000, 2.5em 0em 0 0em rgba(255,128,0, 0.2), 1.75em 1.75em 0 0em rgba(255,128,0, 0.2), 0em 2.5em 0 0em rgba(255,128,0, 0.2), -1.8em 1.8em 0 0em rgba(255,128,0, 0.2), -2.6em 0em 0 0em rgba(255,128,0, 0.2), -1.8em -1.8em 0 0em rgba(255,128,0, 0.5);
+  }
+  25% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.5), 1.8em -1.8em 0 0em rgba(255,128,0, 0.7), 2.5em 0em 0 0em #ff8000, 1.75em 1.75em 0 0em rgba(255,128,0, 0.2), 0em 2.5em 0 0em rgba(255,128,0, 0.2), -1.8em 1.8em 0 0em rgba(255,128,0, 0.2), -2.6em 0em 0 0em rgba(255,128,0, 0.2), -1.8em -1.8em 0 0em rgba(255,128,0, 0.2);
+  }
+  37.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.2), 1.8em -1.8em 0 0em rgba(255,128,0, 0.5), 2.5em 0em 0 0em rgba(255,128,0, 0.7), 1.75em 1.75em 0 0em #ff8000, 0em 2.5em 0 0em rgba(255,128,0, 0.2), -1.8em 1.8em 0 0em rgba(255,128,0, 0.2), -2.6em 0em 0 0em rgba(255,128,0, 0.2), -1.8em -1.8em 0 0em rgba(255,128,0, 0.2);
+  }
+  50% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.2), 1.8em -1.8em 0 0em rgba(255,128,0, 0.2), 2.5em 0em 0 0em rgba(255,128,0, 0.5), 1.75em 1.75em 0 0em rgba(255,128,0, 0.7), 0em 2.5em 0 0em #ff8000, -1.8em 1.8em 0 0em rgba(255,128,0, 0.2), -2.6em 0em 0 0em rgba(255,128,0, 0.2), -1.8em -1.8em 0 0em rgba(255,128,0, 0.2);
+  }
+  62.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.2), 1.8em -1.8em 0 0em rgba(255,128,0, 0.2), 2.5em 0em 0 0em rgba(255,128,0, 0.2), 1.75em 1.75em 0 0em rgba(255,128,0, 0.5), 0em 2.5em 0 0em rgba(255,128,0, 0.7), -1.8em 1.8em 0 0em #ff8000, -2.6em 0em 0 0em rgba(255,128,0, 0.2), -1.8em -1.8em 0 0em rgba(255,128,0, 0.2);
+  }
+  75% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.2), 1.8em -1.8em 0 0em rgba(255,128,0, 0.2), 2.5em 0em 0 0em rgba(255,128,0, 0.2), 1.75em 1.75em 0 0em rgba(255,128,0, 0.2), 0em 2.5em 0 0em rgba(255,128,0, 0.5), -1.8em 1.8em 0 0em rgba(255,128,0, 0.7), -2.6em 0em 0 0em #ff8000, -1.8em -1.8em 0 0em rgba(255,128,0, 0.2);
+  }
+  87.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,128,0, 0.2), 1.8em -1.8em 0 0em rgba(255,128,0, 0.2), 2.5em 0em 0 0em rgba(255,128,0, 0.2), 1.75em 1.75em 0 0em rgba(255,128,0, 0.2), 0em 2.5em 0 0em rgba(255,128,0, 0.2), -1.8em 1.8em 0 0em rgba(255,128,0, 0.5), -2.6em 0em 0 0em rgba(255,128,0, 0.7), -1.8em -1.8em 0 0em #ff8000;
+  }
+}
+
+#outercontainer {
+	padding: 10px;
+	margin: 10px;
+	font-family: 'Roboto Mono', monospace;
+
+}
+
+#header {
+	text-align: center;
+	margin-bottom: 20px;
+	font-size: 30px;
+}
+
+#form {
+	width: 200px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+#input {
+	width: 200px;
+	border: 1px solid black;
+}
+
+button {
+	margin-top: 20px;
+	width: 50px;
+	padding: 3px;
+	border: 1px solid black;
+}
+
+h3 {
+	color: rgb(255,128,0);
+}
+
+.post {
+	/*margin-top: 80px;*/
+	margin-bottom: 80px;
+}
+
+#img img {
+	width: 100px;
+}
+
+#img {
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 20px;
+}
+
+
+	</style>
+</head>
+<body>
+
+
+	<div id="outercontainer">
+
+		<div id="img">
+			<img src="https://vignette.wikia.nocookie.net/theamazingworldofgumball/images/e/ec/Reddit_Logo.png/revision/latest?cb=20170105232917">
+		</div>
+
+		<div id="header">Subreddit Search</div>
+
+		<form id="form">
+			<input id="input"></input>
+			<br/><button id="submit" type="submit">Search</button>
+		</form>
+
+    <div id="loader"></div>
+
+		
+
+    <template id="result-template">
+
+      {{#each subredditPost}}
+
+      <div class="post">
+          <h3><a href="{{url}}" class="orangelink">{{data.title}}</a></h3>
+          Subscribers: {{commas data.subreddit_subscribers}} | 
+          Author: {{data.author}}
+          <br>
+          {{#if data.num_comments}}
+          <span class='comments'>Comments: {{commas data.num_comments}}</span>
+          {{else}}
+          <span class='comments'>No Comments</span>
+          {{/if}}
+      </div>
+
+
+      {{/each}}
+
+    </template>
+
+
+
+	</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="moment.js"></script>
+<script src="handlebars-v4.0.11.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>
